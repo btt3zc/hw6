@@ -66,18 +66,37 @@
                 localStorage.setItem("win_streak", "0"); //if we lose, run a new method to reset win streak, add if we win
                 guesses = [];
                 localStorage.setItem("guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
-                guess_lens = [];
-                localStorage.setItem("num_guesses", JSON.stringify(guess_lens));
+
+                guess_num = [];
+                localStorage.setItem("num_guesses", JSON.stringify(guess_num));
+
+                correct_letters = [];
+                localStorage.setItem("correct_letters", JSON.stringify(correct_letters)); 
+
+                guess_length = [];
+                localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
+
+                l_in_word = [];
+                localStorage.setItem("l_in_word", JSON.stringify(l_in_word)); 
             }
             stat_display = document.getElementById("stats");
             stat_display.innerHTML += "Games played: "+ localStorage.getItem("games_played") + "<br>" + "Games won: " + 
                 localStorage.getItem("games_won") + "<br>" + "Win Streak: " + localStorage.getItem("win_streak");
             
-            if (localStorage.getItem("correct_letters") != null)
+            // if (localStorage.getItem("correct_letters") != null)
+            // {
+            //     word_display = document.getElementById("word_check");
+            //     word_display.innerHTML += "Letters in right spot: "+ localStorage.getItem("correct_letters") + "&nbsp;&nbsp; Characters in word: " + 
+            //     localStorage.getItem("l_in_word") +"&nbsp;&nbsp; Guess length: " + localStorage.getItem("guess_length");
+            // }
+            if (localStorage.getItem("correct_letters") != [])
             {
-                word_display = document.getElementById("word_check");
-                word_display.innerHTML += "Letters in right spot: "+ localStorage.getItem("correct_letters") + "&nbsp;&nbsp; Characters in word: " + 
-                localStorage.getItem("l_in_word") +"&nbsp;&nbsp; Guess length: " + localStorage.getItem("guess_length");
+                for (let i = 0; i<JSON.parse(localStorage.getItem("correct_letters")).length; i++ ){
+                    word_display = document.getElementById("word_check");
+                    word_display.innerHTML += "Letters in right spot: "+ JSON.parse(localStorage.getItem("correct_letters"))[i] + 
+                        "&nbsp;&nbsp; Characters in word: " + JSON.parse(localStorage.getItem("l_in_word"))[i] +"&nbsp;&nbsp; Guess length: " + 
+                        JSON.parse(localStorage.getItem("guess_length"))[i] + "<br>";
+                }
             }
         }       
 
@@ -129,10 +148,12 @@
 
         function CheckWords() {
 
+            let l_in_word_list = JSON.parse(localStorage.getItem("l_in_word"));
             let l_in_word = 0;
+            let correct_letters_list = JSON.parse(localStorage.getItem("correct_letters"));
             let correct_letters = 0;
-
-            //window.alert(localStorage.getItem("answer"));
+            let guess_length = JSON.parse(localStorage.getItem("guess_length"));
+            
             
             if( document.getElementById("answer").value != null) {
                 if (/^[A-Za-z]+$/.test(document.getElementById("answer").value)) {
@@ -159,7 +180,9 @@
 
                     } else if(localStorage.getItem("answer").length === wordguess.length)  {
                         // lengths are the same
-                        localStorage.setItem("guess_length", "correct word length"); 
+                        
+                        guess_length.push("correct length");
+                        localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
                         for(let i  = 0; i < wordguess.length;  i++) { 
                             // case for same letters
                         
@@ -186,19 +209,24 @@
                         guesses.push(wordguess);
                         localStorage.setItem("guesses", JSON.stringify(guesses));
 
-                        localStorage.setItem("correct_letters", correct_letters);
-                        localStorage.setItem("l_in_word", l_in_word)
+                        correct_letters_list.push(correct_letters);
+                        localStorage.setItem("correct_letters", JSON.stringify(correct_letters_list));
+                        
+                        l_in_word_list.push(l_in_word);
+                        localStorage.setItem("l_in_word", JSON.stringify(l_in_word_list));
                     }
                     else {
                         //lengths are not the same
                         var length_1 = localStorage.getItem("answer").length; 
                         var length_2 = document.getElementById("answer").value.length; 
                         if(length_1 > length_2 ) {
-                            localStorage.setItem("guess_length", "too short");
+                            guess_length.push("too short");
+                            localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
                             var shortest = length_2; 
                         } else {
                             var shortest = length_1; 
-                            localStorage.setItem("guess_length", "too long");
+                            localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
+                            guess_length.push("too long");
                         }
                         for(let i = 0; i < shortest;  i++) { 
                             // case for same letters
@@ -224,8 +252,12 @@
                         guesses = JSON.parse(localStorage.getItem("guesses"));
                         guesses.push(wordguess);
                         localStorage.setItem("guesses", JSON.stringify(guesses));
-                        localStorage.setItem("correct_letters", correct_letters);
-                        localStorage.setItem("l_in_word", l_in_word);
+
+                        correct_letters_list.push(correct_letters);
+                        localStorage.setItem("correct_letters", JSON.stringify(correct_letters_list));
+                        
+                        l_in_word_list.push(l_in_word);
+                        localStorage.setItem("l_in_word", JSON.stringify(l_in_word_list));
                         
                     }
                     
