@@ -116,6 +116,73 @@
         }
 
         function CheckWord() {
+            var l_in_word = 0;
+            var correct_letters = 0;
+            if( document.getElementById("answer").value != null) {
+                var wordguess = document.getElementById("answer").value;
+
+                if(wordguess.localCompare(localStorage.getItem(answer))) {
+                    localStorage.setItem("Games won", 1);
+                    destroy(); 
+                    windows.print("congratulations"); 
+
+
+                }  else if(localStorage.getItem(answer).length == wordguess.length)  {
+                    // lengths are the same
+                    localStorage.setItem("guess_length", "correct word length"); 
+                    
+                    for(let i  = 0; i < wordguess.length;  i++) { 
+                        // case for same letters
+                        //strpos($_POST["answer"][$i], $question[$i])
+                        if( localStorage.getItem(answer)[i].localCompare(wordguess[i])) {
+                            correct_letters += 1;
+                        }
+                        //case for in word 
+                        else {
+                            for(let j  = 0; j < wordguess.length;  j++) {
+                                if(CheckWord(localStorage.getItem(answer)), wordguess,i,j == 1)
+                                    l_in_word += 1; 
+                                    break; 
+                                
+                            }
+                            //echo $in_word; 
+                        
+                            //echo  $_POST["answer"][$i]; 
+                            
+                        }
+                    }
+                    
+                } else {
+                    //lengths are not the same
+                    var length_1 = localStorage.getItem(answer).length; 
+                    var length_2 = document.getElementById("answer").value.length; 
+                    if(length_1 >  length_2 ) {
+                        localStorage.setItem("guess_length", "too short");
+                        var shortest = $length_2; 
+                    } else {
+                        var shortest = $length_1; 
+                        localStorage.setItem("guess_length", "too long");
+                    }
+                    for(let i = 0; i < $shortest;  i++) { 
+                        // case for same letters
+                        //strpos($_POST["answer"][$i], $question[$i])
+                        if( localStorage.getItem(answer)[i].localCompare(wordguess[i])) {
+                            correct_letters += 1;
+                        }
+                        //case for in word 
+                        else {
+                            for(let j  = 0; j < wordguess.length;  j++) {
+                                if(CheckWord(localStorage.getItem(answer)), wordguess,i,j == 1)
+                                    l_in_word += 1; 
+                                    break; 
+                                
+                            }
+                            //echo $in_word; 
+                        
+                            //echo  $_POST["answer"][$i]; 
+                        }
+                    }
+                }
 
         }
 
@@ -123,7 +190,15 @@
             storage.clear(); 
             startGame();
         }
-        
+        function CheckWord(q,a,incrementi,incrementj) {
+            strcasecmp(q[incrementj],a[$incrementi]); 
+                if (q[incrementi].localCompare(a[incrementj]) == 0) {
+                    return 1; // in the word, somewhere
+                } else {
+                    return 2; // not in word
+                }
+                            
+        }
 
 
 
