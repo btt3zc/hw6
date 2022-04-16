@@ -122,18 +122,42 @@
             //window.alert(localStorage.getItem("answer")); 
             if( document.getElementById("answer").value != null) {
                 var wordguess = document.getElementById("answer").value;
-                window.alert("reaches here");
-                if(wordguess.localCompare(localStorage.getItem("answer"))) {
+                //window.alert("reaches here");
+                //window.alert(wordguess)
+                if(  wordguess.localeCompare(localStorage.getItem("answer")) ) {
                     localStorage.setItem("Games won", 1);
                     //destroy(); 
-                    window.alert("congratulations"); 
+                    //window.alert("congratulations"); 
                     
-
-                } 
+                } else if(localStorage.getItem("answer").length == wordguess.length)  {
+                    // lengths are the same
+                    localStorage.setItem("guess_length", "correct word length"); 
+                    window.alert("congratulations2"); 
+                    for(let i  = 0; i < wordguess.length;  i++) { 
+                        // case for same letters
+                        //strpos($_POST["answer"][$i], $question[$i])
+                        if( localStorage.getItem("answer")[i].localCompare(wordguess[i])) {
+                            correct_letters += 1;
+                        }
+                        //case for in word 
+                        else {
+                            for(let j  = 0; j < wordguess.length;  j++) {
+                                if(CheckWord(localStorage.getItem("answer")), wordguess,i,j == 1)
+                                    l_in_word += 1; 
+                                    break; 
+                                
+                            }
+                            //echo $in_word; 
+                        
+                            //echo  $_POST["answer"][$i]; 
+                            
+                        }
+                    }
 
 
             } 
         }
+    }
 
 
 
@@ -164,7 +188,7 @@
                         //case for in word 
                         else {
                             for(let j  = 0; j < wordguess.length;  j++) {
-                                if(CheckWord(localStorage.getItem(answer)), wordguess,i,j == 1)
+                                if(Check(localStorage.getItem(answer)), wordguess,i,j == 1)
                                     l_in_word += 1; 
                                     break; 
                                 
@@ -215,9 +239,9 @@
             startGame();
         }
 
-        function CheckWord(q,a,incrementi,incrementj) {
+        function Check(q,a,incrementi,incrementj) {
             strcasecmp(q[incrementj],a[$incrementi]); 
-                if (q[incrementi].localCompare(a[incrementj]) == 0) {
+                if (q[incrementi].localeCompare(a[incrementj]) == 0) {
                     return 1; // in the word, somewhere
                 } else {
                     return 2; // not in word
