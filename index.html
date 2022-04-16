@@ -24,7 +24,7 @@
                         <input type="text" class="form-control" id="answer" name="answer" placeholder="Type your answer here">
                     </div>
                     <div class="text-center">                
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" onclick="CheckWord()">Submit</button>
                     <button type="submit" class="btn btn-primary" onclick="destroy()">Game over </button>
                     </div>
                 </form>
@@ -46,9 +46,10 @@
                 getRandomWord( (newWord) => {
                     answer = newWord;
                     localStorage.setItem("answer", answer);
-                    alert(answer);
+                    // alert(answer);
                   });
             }
+
             if ( localStorage.getItem("games_played") == null){
                 localStorage.setItem("games_played", "0"); //parseint() to convert string to int, only strings in local storage according to google
                 localStorage.setItem("games_won", "0");
@@ -111,21 +112,18 @@
             callback(newWord);
         }
 
-        function Wordle() {
-
-        }
-
         function CheckWord() {
             var l_in_word = 0;
             var correct_letters = 0;
+            return "hi";
             if( document.getElementById("answer").value != null) {
                 var wordguess = document.getElementById("answer").value;
 
                 if(wordguess.localCompare(localStorage.getItem(answer))) {
                     localStorage.setItem("Games won", 1);
-                    destroy(); 
+                    //destroy(); 
                     windows.print("congratulations"); 
-
+                    
 
                 }  else if(localStorage.getItem(answer).length == wordguess.length)  {
                     // lengths are the same
@@ -183,13 +181,14 @@
                         }
                     }
                 }
-
+            }
         }
 
         function destroy() {
             storage.clear(); 
             startGame();
         }
+
         function CheckWord(q,a,incrementi,incrementj) {
             strcasecmp(q[incrementj],a[$incrementi]); 
                 if (q[incrementi].localCompare(a[incrementj]) == 0) {
@@ -206,5 +205,3 @@
 
 
 </html>
-
-
