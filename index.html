@@ -25,7 +25,7 @@
                     </div>
                     <div class="text-center">                
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="?command=gameover" class="btn btn-danger">Game Over</a>
+                    <button type="submit" class="btn btn-primary" onclick="destroy()">Game over </button>
                     </div>
                 </form>
                 </div>
@@ -115,6 +115,14 @@
 
         }
 
+        function CheckWord() {
+
+        }
+
+        function destroy() {
+            storage.clear(); 
+            startGame();
+        }
         
 
 
