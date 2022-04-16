@@ -238,8 +238,15 @@
             }
         }   
         
-        word_display = document.getElementById("word_check");
-        word_display.innerHTML += "previous guesses: " + JSON.parse(localStorage.getItem("guesses")) +"<br>";
+        if( JSON.parse(localStorage.getItem("guesses")) == null ){
+            word_display = document.getElementById("word_check");
+            word_display.innerHTML += "previous guesses: " + "<br>";
+        }
+        
+        else {
+            word_display = document.getElementById("word_check");
+            word_display.innerHTML += "previous guesses: " + JSON.parse(localStorage.getItem("guesses")) +"<br>";
+        }
         
 
         function destroy() {
