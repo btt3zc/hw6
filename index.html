@@ -18,8 +18,13 @@
             <div class="row">
                 <div class="col-xs-8 mx-auto">
                     <div class="h-100 p-5 bg-light border rounded-3">
+                        <div id = word_check>
+
+                        </div>
                     </div>
-                    <div id ="word_check">
+                    <div id ="stats">
+                        Stats:
+                        <br>
                     </div>
                 <form action="?" method="post">
                     <div class="h-10 p-5 mb-3">
@@ -27,8 +32,8 @@
                     </div>
                     <div class="text-center">                
                     <button type="submit" class="btn btn-primary" onclick="CheckWords()">Submit</button>
-                    <button type="submit" class="btn btn-primary" onclick="destroy()">Game over </button>
-                    <button type="submit" class="btn btn-primary" onclick="restart()">Reset Statistics </button>
+                    <button type="submit" class="btn btn-primary" onclick="restart()">New Game </button>
+                    <button type="submit" class="btn btn-primary" onclick="destroy()">Reset Statistics </button>
                     </div>
                 </form>
                 </div>
@@ -56,21 +61,25 @@
             }
 
             if ( localStorage.getItem("games_played") == null){
-                localStorage.setItem("games_played", "0"); 
+                localStorage.setItem("games_played", "1"); 
                 localStorage.setItem("games_won", "0");
-                guesses = [0];
-                //[5,4,2]
                 localStorage.setItem("win_streak", "0"); //if we lose, run a new method to reset win streak, add if we win
-                localStorage.setItem("num_guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
-            } 
-        }
-
-        function resetStreak(){
-            localStorage.removeItem('win_streak');
-            localStorage.setItem("win_streak", "0");
-        }
-
-        
+                guesses = [];
+                localStorage.setItem("guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
+                guess_lens = [];
+                localStorage.setItem("num_guesses", JSON.stringify(guess_lens));
+            }
+            stat_display = document.getElementById("stats");
+            stat_display.innerHTML += "Games played: "+ localStorage.getItem("games_played") + "<br>" + "Games won: " + 
+                localStorage.getItem("games_won") + "<br>" + "Win Streak: " + localStorage.getItem("win_streak");
+            
+            if (localStorage.getItem("correct_letters") != null)
+            {
+                word_display = document.getElementById("word_check");
+                word_display.innerHTML += "Letters in right spot: "+ localStorage.getItem("correct_letters") + "&nbsp;&nbsp; Characters in word: " + 
+                localStorage.getItem("l_in_word") +"&nbsp;&nbsp; Guess length: " + localStorage.getItem("guess_length");
+            }
+        }       
 
 
         function queryWord() {
@@ -118,14 +127,7 @@
             callback(newWord);
         }
 
-        function test() {
-            window.alert("hi")
-        }
-
         function CheckWords() {
-            let played = parseInt(localStorage.getItem("games_played"));
-            played += 1;
-            localStorage.setItem("games_played",played);
 
             let l_in_word = 0;
             let correct_letters = 0;
@@ -136,6 +138,10 @@
                 if (/^[A-Za-z]+$/.test(document.getElementById("answer").value)) {
                     var wordguess = document.getElementById("answer").value; 
                     if(  wordguess.localeCompare(localStorage.getItem("answer")) == 0 ) {
+                        let played = parseInt(localStorage.getItem("games_played"));
+                        played += 1;
+                        localStorage.setItem("games_played",played);
+
                         let wins = parseInt(localStorage.getItem("games_won"));
                         wins+=1;
                         localStorage.setItem("games_won", wins);
@@ -143,8 +149,10 @@
                         let streak = parseInt(localStorage.getItem("win_streak"));
                         streak+=1;
                         localStorage.setItem("win_streak", streak);
+
                         restart();
                         
+                        localStorage.removeItem("guesses");
                         //guesses [2,3,4]
                         // let guesses = JSON.parse(localStorage.getItem("guesses")) ;
                         // let guess = parseInt(guesses[guesses.length-1]) + 1;
@@ -174,6 +182,10 @@
                                 
                             }
                         }
+                        guesses = JSON.parse(localStorage.getItem("guesses"));
+                        guesses.push(wordguess);
+                        localStorage.setItem("guesses", JSON.stringify(guesses));
+
                         localStorage.setItem("correct_letters", correct_letters);
                         localStorage.setItem("l_in_word", l_in_word)
                     }
@@ -209,6 +221,9 @@
                                 
                             }
                         }
+                        guesses = JSON.parse(localStorage.getItem("guesses"));
+                        guesses.push(wordguess);
+                        localStorage.setItem("guesses", JSON.stringify(guesses));
                         localStorage.setItem("correct_letters", correct_letters);
                         localStorage.setItem("l_in_word", l_in_word);
                         
@@ -223,8 +238,12 @@
             }
         }   
         
+        word_display = document.getElementById("word_check");
+        word_display.innerHTML += "previous guesses: " + JSON.parse(localStorage.getItem("guesses")) +"<br>";
+        
+
         function destroy() {
-            storage.clear(); 
+            localStorage.clear(); 
             startGame();
         }
 
@@ -245,10 +264,7 @@
                             
         }
 
-        if (localStorage.getItem("answer")){
-            word_display = document.getElementById("word_check");
-            word_display.innerHTML += "";
-        }
+        
         
 
     </script>
