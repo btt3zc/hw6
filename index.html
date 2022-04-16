@@ -46,8 +46,9 @@
                 getRandomWord( (newWord) => {
                     answer = newWord;
                     localStorage.setItem("answer", answer);
-                    // alert(answer);
+                    alert(answer);
                   });
+            
             }
 
             if ( localStorage.getItem("games_played") == null){
@@ -124,25 +125,28 @@
                 var wordguess = document.getElementById("answer").value;
                 //window.alert("reaches here");
                 //window.alert(wordguess)
-                if(  wordguess.localeCompare(localStorage.getItem("answer")) ) {
+                //window.alert(localStorage.getItem("answer").length); 
+               // window.alert(wordguess.length); 
+                if(  wordguess.localeCompare(localStorage.getItem("answer")) == 0 ) {
                     localStorage.setItem("Games won", 1);
                     //destroy(); 
                     //window.alert("congratulations"); 
                     
-                } else if(localStorage.getItem("answer").length == wordguess.length)  {
+                } else if(localStorage.getItem("answer").length === wordguess.length)  {
                     // lengths are the same
                     localStorage.setItem("guess_length", "correct word length"); 
-                    window.alert("congratulations2"); 
+                    //window.alert("true"); 
                     for(let i  = 0; i < wordguess.length;  i++) { 
                         // case for same letters
                         //strpos($_POST["answer"][$i], $question[$i])
-                        if( localStorage.getItem("answer")[i].localCompare(wordguess[i])) {
+                        if( localStorage.getItem(answer)[i].localCompare(wordguess[i]) == 0) {
                             correct_letters += 1;
+                            
                         }
                         //case for in word 
                         else {
                             for(let j  = 0; j < wordguess.length;  j++) {
-                                if(CheckWord(localStorage.getItem("answer")), wordguess,i,j == 1)
+                                if(Check(localStorage.getItem(answer)), wordguess,i,j == 1)
                                     l_in_word += 1; 
                                     break; 
                                 
@@ -153,11 +157,11 @@
                             
                         }
                     }
-
-
             } 
         }
-    }
+            window.alert(correct_letters);
+            window.alert(l_in_word); 
+    }   
 
 
 
