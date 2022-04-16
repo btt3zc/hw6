@@ -24,7 +24,7 @@
                         <input type="text" class="form-control" id="answer" name="answer" placeholder="Type your answer here">
                     </div>
                     <div class="text-center">                
-                    <button type="submit" class="btn btn-primary" onclick="CheckWord()">Submit</button>
+                    <button type="submit" class="btn btn-primary" onclick="CheckWords()">Submit</button>
                     <button type="submit" class="btn btn-primary" onclick="destroy()">Game over </button>
                     </div>
                 </form>
@@ -112,10 +112,36 @@
             callback(newWord);
         }
 
+        function test() {
+            window.alert("hi")
+        }
+
+        function CheckWords() {
+            var l_in_word = 0;
+            var correct_letters = 0;
+            //window.alert(localStorage.getItem("answer")); 
+            if( document.getElementById("answer").value != null) {
+                var wordguess = document.getElementById("answer").value;
+                window.alert("reaches here");
+                if(wordguess.localCompare(localStorage.getItem("answer"))) {
+                    localStorage.setItem("Games won", 1);
+                    //destroy(); 
+                    window.alert("congratulations"); 
+                    
+
+                } 
+
+
+            } 
+        }
+
+
+
+
         function CheckWord() {
             var l_in_word = 0;
             var correct_letters = 0;
-            return "hi";
+            window.alert(localStorage); 
             if( document.getElementById("answer").value != null) {
                 var wordguess = document.getElementById("answer").value;
 
