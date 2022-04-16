@@ -14,6 +14,7 @@
                 <h1>CS4640 Wordle Game</h1>
                 <h3>Hello Enter guess  </h3>
             </div>
+
             <div class="row">
                 <div class="col-xs-8 mx-auto">
                 <form action="?" method="post">
@@ -36,7 +37,8 @@
     <script>
 
         function makeGame() {
-            
+            //if win, 
+            //if lose,
         }
 
         function startGame() {
@@ -46,10 +48,20 @@
                     localStorage.setItem("answer", answer);
                     alert(answer);
                   });
+            }
+            if ( localStorage.getItem("games_played") == null){
+                localStorage.setItem("games_played", "0"); //parseint() to convert string to int, only strings in local storage according to google
+                localStorage.setItem("games_won", "0");
+                guesses = [];
+                localStorage.setItem("win_streak", "0"); //if we lose, run a new method to reset win streak, add if we win
+                localStorage.setItem("num_guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
             } 
+        }
 
-            window.alert(localStorage.getItem("answer")); 
-          }
+        function resetStreak(){
+            localStorage.removeItem('win_streak');
+            localStorage.setItem("win_streak", "0");
+        }
 
         
 
