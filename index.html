@@ -53,7 +53,6 @@
                 getRandomWord( (newWord) => {
                     answer = newWord;
                     localStorage.setItem("answer", answer);
-                    alert(answer);
                   });
                 guesses = [];
                 localStorage.setItem("guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
