@@ -55,20 +55,8 @@
                     localStorage.setItem("answer", answer);
                     alert(answer);
                   });
-            
-            }
-
-            if ( localStorage.getItem("games_played") == null){
-                localStorage.setItem("games_played", "1"); 
-                localStorage.setItem("games_won", "0");
-                localStorage.setItem("win_streak", "0"); //if we lose, run a new method to reset win streak, add if we win
-
                 guesses = [];
                 localStorage.setItem("guesses", JSON.stringify(guesses)); //stores list. JSON.parse(list) to get list 
-
-                guess_num = [];
-                guess_num.push(0);
-                localStorage.setItem("num_guesses", JSON.stringify(guess_num));
 
                 correct_letters = [];
                 localStorage.setItem("correct_letters", JSON.stringify(correct_letters)); 
@@ -79,17 +67,29 @@
                 l_in_word = [];
                 localStorage.setItem("l_in_word", JSON.stringify(l_in_word)); 
             }
+
+            if ( localStorage.getItem("games_played") == null){
+                localStorage.setItem("games_played", "1"); 
+                localStorage.setItem("games_won", "0");
+                localStorage.setItem("win_streak", "0"); //if we lose, run a new method to reset win streak, add if we win
+
+                guess_num = [];
+                guess_num.push(0);
+                localStorage.setItem("num_guesses", JSON.stringify(guess_num));
+            }
             
             
             let total_guesses = 0;
-            if (localStorage.getItem("correct_letters") != [])
+            if (localStorage.getItem("correct_letters") != [] || localStorage.getItem("correct_letters") != null)
             {
-                for (let i = 0; i<JSON.parse(localStorage.getItem("correct_letters")).length; i++ ){
-                    total_guesses += JSON.parse(localStorage.getItem("num_guesses"))[i];
+                for (let i = 0; i<JSON.parse(localStorage.getItem("correct_letters")).length ; i++ ){
                     word_display = document.getElementById("word_check");
                     word_display.innerHTML += "Letters in right spot: "+ JSON.parse(localStorage.getItem("correct_letters"))[i] + 
                         "&nbsp;&nbsp; Characters in word: " + JSON.parse(localStorage.getItem("l_in_word"))[i] +"&nbsp;&nbsp; Guess length: " + 
                         JSON.parse(localStorage.getItem("guess_length"))[i] + "<br>";
+                }
+                for (let j = 0; j<JSON.parse(localStorage.getItem("num_guesses")).length; j++ ){
+                    total_guesses += JSON.parse(localStorage.getItem("num_guesses"))[j];
                 }
             }
             let avg_guesses = total_guesses/parseInt(localStorage.getItem("games_played"));
@@ -158,7 +158,7 @@
             if( document.getElementById("answer").value != null) {
                 if (/^[A-Za-z]+$/.test(document.getElementById("answer").value)) {
                     var wordguess = document.getElementById("answer").value; 
-                    if(  wordguess.localeCompare(localStorage.getItem("answer")) == 0 ) {
+                    if(  wordguess.localeCompare(localStorage.getItem("answer"), 'en', { sensitivity: 'base' }) == 0 ) {
                         let played = parseInt(localStorage.getItem("games_played"));
                         played += 1;
                         localStorage.setItem("games_played",played);
@@ -171,13 +171,15 @@
                         streak+=1;
                         localStorage.setItem("win_streak", streak);
 
-                        parseInt(num_guesses_list[game_increment]) += 1;
+                        let guess_num = parseInt(num_guesses_list[game_increment]);
+                        num_guesses_list[game_increment] = guess_num + 1;
                         num_guesses_list.push(0);
-                        localStorage.setItem("num_guesses",num_guesses_list);
+                                                
+                        localStorage.setItem("num_guesses",JSON.stringify(num_guesses_list));
                         
                         restart();
                         
-                        localStorage.removeItem("guesses");
+                        
                         //guesses [2,3,4]
                         // let guesses = JSON.parse(localStorage.getItem("guesses")) ;
                         // let guess = parseInt(guesses[guesses.length-1]) + 1;
@@ -191,7 +193,7 @@
                             // case for same letters
                         
 
-                            if( localStorage.getItem("answer")[i].localeCompare(wordguess[i]) == 0) {
+                            if( localStorage.getItem("answer")[i].localeCompare(wordguess[i], 'en', { sensitivity: 'base' }) == 0) {
                                  correct_letters += 1;
                             
                             }
@@ -203,10 +205,7 @@
                                         break; 
                                     }
                                 }
-                                //echo $in_word; 
-                        
-                                //echo  $_POST["answer"][$i]; 
-                                
+                                                               
                             }
                         }
                         guesses = JSON.parse(localStorage.getItem("guesses"));
@@ -218,6 +217,10 @@
                         
                         l_in_word_list.push(l_in_word);
                         localStorage.setItem("l_in_word", JSON.stringify(l_in_word_list));
+
+                        let guess_num = parseInt(num_guesses_list[game_increment]);
+                        num_guesses_list[game_increment] = guess_num + 1;
+                        localStorage.setItem("num_guesses",JSON.stringify(num_guesses_list));
                     }
                     else {
                         //lengths are not the same
@@ -228,14 +231,14 @@
                             localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
                             var shortest = length_2; 
                         } else {
-                            var shortest = length_1; 
-                            localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
                             guess_length.push("too long");
+                            localStorage.setItem("guess_length", JSON.stringify(guess_length)); 
+                            var shortest = length_1;
                         }
                         for(let i = 0; i < shortest;  i++) { 
                             // case for same letters
                             
-                            if( localStorage.getItem("answer")[i].localeCompare(wordguess[i]) == 0) {
+                            if( localStorage.getItem("answer")[i].localeCompare(wordguess[i], 'en', { sensitivity: 'base' }) == 0) {
                                 correct_letters += 1;
                                 
                             }
@@ -263,6 +266,9 @@
                         l_in_word_list.push(l_in_word);
                         localStorage.setItem("l_in_word", JSON.stringify(l_in_word_list));
                         
+                        let guess_num = parseInt(num_guesses_list[game_increment]);
+                        num_guesses_list[game_increment] = guess_num + 1;
+                        localStorage.setItem("num_guesses",JSON.stringify(num_guesses_list));
                     }
                     
                 }
@@ -296,12 +302,11 @@
             localStorage.removeItem("correct_letters");
             localStorage.removeItem("l_in_word");
             localStorage.removeItem("guesses");
-            localStorage.removeItem("num_guesses");
         }
 
         function Check(q,a,incrementi,incrementj) {
             // strcasecmp(q[incrementj],a[$incrementi]); 
-                if (q[incrementi].localeCompare(a[incrementj]) == 0) {
+                if (q[incrementi].localeCompare(a[incrementj], 'en', { sensitivity: 'base' }) == 0) {
                     return 1; // in the word, somewhere
                 } else {
                     return 2; // not in word
